@@ -74,6 +74,19 @@ app.post("/", function(req, res) {
 	.catch((err) => console.log(err));
 });
 
-app.listen(3000, function() {
-	console.log("Server started on port 3000");
+// Verify Facebook Callback
+app.get("/", function(req,res) {
+	let token = req.query['hub.verify_token'];
+	let challenge = req.query['hub.challenge'];
+
+	if (token == 'rihakula') {
+		res.send(challenge);
+	} else { 
+		res.status(500).send("Something broke!");
+	}
+
+});
+
+app.listen(process.env.PORT, function() {
+	console.log("Server started on port " + process.env.PORT);
 });
